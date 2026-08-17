@@ -8,6 +8,7 @@ header{
     background-color: #0f4d00;
     font-size: 45px;
     display: flex;
+    color: white;
 }
 .flex{
     display: flex;
