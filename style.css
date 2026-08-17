@@ -1,3 +1,14 @@
+body{
+    font-family: "Noto Serif JP", serif;
+    margin: 0;
+    padding: 0;
+    border: 10px solid #0f4d00;
+}
+header{
+    background-color: #0f4d00;
+    font-size: 45px;
+    display: flex;
+}
 .flex{
     display: flex;
 }
