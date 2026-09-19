@@ -10,6 +10,20 @@ header{
     display: flex;
     color: white;
 }
+footer{
+    background-color: #0f4d00;
+    font-size: 18px;
+    display: flex;
+    color: white;
+}
+p{
+    font-size: 18px
+}
 .flex{
     display: flex;
+}
+
+.upBanar{
+    background-color: #ffffe0;
+    padding: 16px;
 }

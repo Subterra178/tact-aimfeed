@@ -13,6 +13,21 @@
     <p>
         　TACT-AIM FeedはTACT-AIM公認の情報サイトです。 TACT-AIMに関する様々な情報や役立つツールを発信していきます!!
     </p>
+    <div class="upBanar" id="nowFest">
+        <h1>NOW Fest!!</h1>
+        <div class="flex">
+            <img src="fes.png" height="256px">
+            <div>
+                <h2>TACT-AIM DARK & NIGHTMARE</h2>
+                <p>
+                    Created by <a href="https://scratch.mit.edu/users/_DRgames_/" target="_blank">@_DR_games_</a>
+                </p>
+                <a href="https://scratch.mit.edu/projects/1380643964/">Scratchで開く</a><br>
+                <a href="https://turbowarp.org/1380643964/">Turbowarpで開く (推奨)</a><br><br>
+                <a href="mirror">TACT-AIM Feed ミラー</a>
+            </div>
+        </div>
+    </div>
     <h1>TACT-AIMとは</h1>
     <div class="flex">
         <img src="tact-aim.png" alt="TACT-AIM" width="30%" height="30%">
@@ -27,10 +42,21 @@
             </p>
             <a href="https://scratch.mit.edu/studios/50762259/">TACT-AIM公式スタジオ(Scratch)</a><br>
             <a href="https://scratch.mit.edu/projects/831274817">Scratchで開く</a><br>
-            <a href="https://turbowarp.org/831274817?fps=60&hqpen">Turbowarpで開く(推奨)</a><br><br>
-            <a href="./play/">TACT-AIM Feedミラー</a><br>
+            <a href="https://turbowarp.org/831274817?fps=60&hqpen">Turbowarpで開く (推奨)</a><br><br>
+            <a href="./mirror/">TACT-AIM Feedミラー</a><br>
             <a href="https://monnku.github.io/TACT-AIM-html/">monnku氏ミラー</a><br><br>
         </div>
     </div>
+    <script>
+        const today = new Date().getDate();
+        const nowFestElement = document.getElementById('nowFest');
+        if (nowFestElement) {
+        if (today % 2 !== 0) {
+            nowFestElement.style.display = 'block';
+        } else {
+            nowFestElement.style.display = 'none';
+        }
+        }
+    </script>
 </body>
 </html>

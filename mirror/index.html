@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>TACT-AIM Mirror / TACT-AIM Feed</title>
+    <link rel="stylesheet" href="https://tact-aim.mumeikansoku.net/style.css">
+    <meta name="description" content="TACT-AIM公認情報サイト TACT-AIM Feedです。様々な情報やツールを用意しています!">
+</head>
+<body>
+    <header>
+        TACT-AIM Feed
+    </header>
+    <h1>MIRROR</h1>
+    <p>
+        　主にTurbowarpが開けない方のためのミラーです。 実はTurbowarpをブラウザで開くよりも軽いとの噂も...
+    </p>
+    <div class="flex">
+        <img src="../tact-aim.png" height="256px">
+        <div>
+            <h1>TACT-AIM 16.7</h1>
+            <div class="search-form">
+                <input type="text" id="playerName" class="search-input" placeholder="Player名を入力" required>
+                <button type="button" class="search-button" onclick="play()">開く</button>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="flex">
+        <img src="../fes.png" height="256px">
+        <div>
+            <h1>TACT-AIM DARK & NIGHTMARE</h1>
+            <div class="search-form">
+                <input type="text" id="FplayerName" class="search-input" placeholder="Player名を入力" required>
+                <button type="button" class="search-button" onclick="fes()">開く</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        TACT-AIM Feedは公認ポータルサイトです。TACT-AIMに関する様々な情報や役立つツールを発信していきます!!<br><br>
+        ©Copyright 2023-2026 uk-400. This site is created by Subterra178(Kohei3255).
+    </footer>
+    <script>
+        function play() {
+            var nameValue = document.getElementById('playerName').value;
+            if (!nameValue.trim()) {
+                alert('Player名を入力してください');
+                return;
+            }
+            window.location.href = 'play/index.html?name=' + encodeURIComponent(nameValue);
+        }
+
+        function fes(){
+            var nameValue = document.getElementById('FplayerName').value;
+            if (!nameValue.trim()) {
+                alert('player名を入力してください');
+                return;
+            }
+            window.location.href = 'fes/index.html?name=' + encodeURIComponent(nameValue);
+        }
+    </script>
+</body>
+
+<style>
+    .search-button {
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #00007a;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 122, 255, 0.2);
+        transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+</style>
+</html>
