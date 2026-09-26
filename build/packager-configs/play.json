@@ -1,0 +1,36 @@
+{
+  "turbo": false,
+  "interpolation": false,
+  "framerate": 60,
+  "highQualityPen": true,
+  "maxClones": 300,
+  "fencing": true,
+  "miscLimits": true,
+  "stageWidth": 480,
+  "stageHeight": 360,
+  "resizeMode": "preserve-ratio",
+  "autoplay": false,
+  "username": "player####",
+  "closeWhenStopped": false,
+  "projectId": "831274817",
+  "appearance": {
+    "accent": "#3584e4"
+  },
+  "controls": {
+    "greenFlag": { "enabled": true },
+    "stopAll": { "enabled": true },
+    "fullscreen": { "enabled": true },
+    "pause": { "enabled": true }
+  },
+  "compiler": {
+    "enabled": true,
+    "warpTimer": false
+  },
+  "packagedRuntime": true,
+  "target": "html",
+  "cloudVariables": {
+    "mode": "ws",
+    "cloudHost": "wss://clouddata.turbowarp.org"
+  },
+  "maxTextureDimension": 2048
+}

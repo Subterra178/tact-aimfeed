@@ -1,0 +1,11 @@
+{
+  "name": "tact-aim-feed-build",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@turbowarp/packager": "3.13.0"
+  }
+}
