@@ -1,11 +1,72 @@
-name: updateMirror
+name: Update Scratch Mirror
+
 on:
+  schedule:
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+concurrency:
+  group: update-scratch-mirror
+  cancel-in-progress: true
+
 jobs:
-  test:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-    - name: test
-      run: echo "ヽ(ﾟ∀｡)ﾉｳｪ"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check Scratch project
+        id: scratch
+        run: node scripts/check-scratch-update.js
+
+      - name: Stop when Scratch has not changed
+        if: steps.scratch.outputs.changed != 'true'
+        run: echo 'Scratch project has not changed; nothing to do.'
+
+      - name: Package Scratch project
+        if: steps.scratch.outputs.changed == 'true'
+        run: node scripts/package-scratch.js
+
+      - name: Save Scratch state
+        if: steps.scratch.outputs.changed == 'true'
+        env:
+          SHA256: ${{ steps.scratch.outputs.sha256 }}
+        run: |
+          cat > build/scratch-state.json <<EOF2
+          {
+            "projectId": "831274817",
+            "sha256": "${SHA256}"
+          }
+          EOF2
+
+      - name: Commit generated files
+        if: steps.scratch.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git add mirror/play mirror/playlite build/scratch-state.json
+
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+
+          git commit -m 'Update Scratch mirror'
+          git push
