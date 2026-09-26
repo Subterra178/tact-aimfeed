@@ -8,4 +8,4 @@ jobs:
 
     steps:
     - name: test
-      run: echo "GitHub Actions is working!"
+      run: echo "ヽ(ﾟ∀｡)ﾉｳｪ"
