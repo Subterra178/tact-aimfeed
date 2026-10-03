@@ -22,37 +22,32 @@ async function downloadProject() {
   return Buffer.from(await projectResponse.arrayBuffer());
 }
 
-function applyConfig(target, config, prefix = '') {
+function applyConfig(target, config) {
   for (const [key, value] of Object.entries(config)) {
-    const fullKey = prefix ? `${prefix}.${key}` : key;
-
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
         target[key] = {};
       }
-      applyConfig(target[key], value, fullKey);
+      applyConfig(target[key], value);
     } else {
       target[key] = value;
     }
   }
 }
 
-function getPath(object, pathString) {
-  return pathString.split('.').reduce((value, key) => value?.[key], object);
-}
-
-function verifyConfig(packager, config, name) {
+function verifyConfig(target, config, prefix = '') {
   for (const [key, value] of Object.entries(config)) {
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      verifyConfig(packager, value, name);
-      continue;
-    }
+    const name = prefix ? `${prefix}.${key}` : key;
 
-    const actual = getPath(packager.options, key);
-    if (JSON.stringify(actual) !== JSON.stringify(value)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (!target[key] || typeof target[key] !== 'object') {
+        throw new Error(`${name}: Packager option group was not created.`);
+      }
+      verifyConfig(target[key], value, name);
+    } else if (JSON.stringify(target[key]) !== JSON.stringify(value)) {
       throw new Error(
-        `${name}: Packager option '${key}' was not applied. ` +
-        `expected ${JSON.stringify(value)}, got ${JSON.stringify(actual)}`
+        `${name}: Packager option was not applied. ` +
+        `expected ${JSON.stringify(value)}, got ${JSON.stringify(target[key])}`
       );
     }
   }
@@ -74,11 +69,11 @@ async function main() {
     packager.project = loadedProject;
 
     // Apply only the fields explicitly present in this build's config.
-    // A new Packager is created for every output because Packager instances are single-use.
+    // A new Packager is created for every output so the two builds are independent.
     applyConfig(packager.options, config);
-    verifyConfig(packager, config, item.name);
+    verifyConfig(packager.options, config);
 
-    console.log(`${item.name}: applied config ${configPath}`);
+    console.log(`${item.name}: config verified`);
     console.log(`${item.name}: highQualityPen=${JSON.stringify(packager.options.highQualityPen)}`);
     console.log(`${item.name}: framerate=${JSON.stringify(packager.options.framerate)}`);
     console.log(`${item.name}: turbo=${JSON.stringify(packager.options.turbo)}`);
