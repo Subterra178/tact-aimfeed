@@ -3,6 +3,13 @@ name: Update Scratch Mirror
 on:
   schedule:
     - cron: '*/10 * * * *'
+  push:
+    paths:
+      - 'build/packager-configs/**'
+      - 'scripts/package-scratch.js'
+      - 'scripts/patch-index.js'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
@@ -33,18 +40,19 @@ jobs:
 
       - name: Check Scratch project
         id: scratch
+        if: github.event_name == 'schedule'
         run: node scripts/check-scratch-update.js
 
       - name: Stop when Scratch has not changed
-        if: steps.scratch.outputs.changed != 'true'
+        if: github.event_name == 'schedule' && steps.scratch.outputs.changed != 'true'
         run: echo 'Scratch project has not changed; nothing to do.'
 
       - name: Package Scratch project
-        if: steps.scratch.outputs.changed == 'true'
+        if: github.event_name != 'schedule' || steps.scratch.outputs.changed == 'true'
         run: node scripts/package-scratch.js
 
       - name: Save Scratch state
-        if: steps.scratch.outputs.changed == 'true'
+        if: github.event_name == 'schedule' && steps.scratch.outputs.changed == 'true'
         env:
           SHA256: ${{ steps.scratch.outputs.sha256 }}
         run: |
@@ -56,7 +64,7 @@ jobs:
           EOF2
 
       - name: Commit generated files
-        if: steps.scratch.outputs.changed == 'true'
+        if: github.event_name != 'schedule' || steps.scratch.outputs.changed == 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
