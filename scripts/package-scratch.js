@@ -22,6 +22,42 @@ async function downloadProject() {
   return Buffer.from(await projectResponse.arrayBuffer());
 }
 
+function applyConfig(target, config, prefix = '') {
+  for (const [key, value] of Object.entries(config)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])) {
+        target[key] = {};
+      }
+      applyConfig(target[key], value, fullKey);
+    } else {
+      target[key] = value;
+    }
+  }
+}
+
+function getPath(object, pathString) {
+  return pathString.split('.').reduce((value, key) => value?.[key], object);
+}
+
+function verifyConfig(packager, config, name) {
+  for (const [key, value] of Object.entries(config)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      verifyConfig(packager, value, name);
+      continue;
+    }
+
+    const actual = getPath(packager.options, key);
+    if (JSON.stringify(actual) !== JSON.stringify(value)) {
+      throw new Error(
+        `${name}: Packager option '${key}' was not applied. ` +
+        `expected ${JSON.stringify(value)}, got ${JSON.stringify(actual)}`
+      );
+    }
+  }
+}
+
 async function main() {
   const projectData = await downloadProject();
   console.log(`Downloaded Scratch project ${PROJECT_ID}`);
@@ -37,14 +73,15 @@ async function main() {
     const packager = new Packager.Packager();
     packager.project = loadedProject;
 
-    // Only override the fields explicitly present in the config.
-    for (const [key, value] of Object.entries(config)) {
-      if (value && typeof value === 'object' && !Array.isArray(value) && packager.options[key] && typeof packager.options[key] === 'object') {
-        Object.assign(packager.options[key], value);
-      } else {
-        packager.options[key] = value;
-      }
-    }
+    // Apply only the fields explicitly present in this build's config.
+    // A new Packager is created for every output because Packager instances are single-use.
+    applyConfig(packager.options, config);
+    verifyConfig(packager, config, item.name);
+
+    console.log(`${item.name}: applied config ${configPath}`);
+    console.log(`${item.name}: highQualityPen=${JSON.stringify(packager.options.highQualityPen)}`);
+    console.log(`${item.name}: framerate=${JSON.stringify(packager.options.framerate)}`);
+    console.log(`${item.name}: turbo=${JSON.stringify(packager.options.turbo)}`);
 
     const result = await packager.package();
     if (result.type !== 'text/html') throw new Error(`${item.name}: expected HTML output, got ${result.type}`);
