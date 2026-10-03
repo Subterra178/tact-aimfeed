@@ -1,7 +1,7 @@
 {
   "turbo": false,
   "interpolation": false,
-  "framerate": 30,
+  "framerate": 60,
   "highQualityPen": false,
   "maxClones": 300,
   "fencing": true,
