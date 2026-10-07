@@ -1,14 +1,26 @@
+:root{
+    --thumb-width:310px;
+}
+
+a{
+     text-decoration: none;
+}
+
 body{
     font-family: "Noto Serif JP", serif;
     margin: 0;
     padding: 0;
-    border: 10px solid #0f4d00;
+    text-indent: 10px;;
 }
 header{
+    display: flex;
     background-color: #0f4d00;
     font-size: 45px;
     display: flex;
     color: white;
+    text-indent: 10px;
+    justify-content: center;
+    align-items: center;
 }
 footer{
     background-color: #0f4d00;
@@ -16,14 +28,51 @@ footer{
     display: flex;
     color: white;
 }
-p{
-    font-size: 18px
-}
-.flex{
+
+#menu{
+    gap:10px;
+    background-color: #082900;
+    color: #fff;
     display: flex;
+    justify-content: space-around;
+}
+#menu a{
+    color:white;
 }
 
-.upBanar{
-    background-color: #ffffe0;
-    padding: 16px;
+.project{
+    display: grid;
+    grid-template-columns: var(--thumb-width) 1fr;
+    column-gap: 0px;
+
+    grid-template-areas:
+    "title title"
+    "img bio"
+    "link .."
+    ;
+}
+
+.project h3{
+    grid-area: title;
+}
+.project img{
+    grid-area: img;
+    width:var(--thumb-width);
+    height: auto;
+    margin: 10px;
+}
+.project .bio{
+    grid-area: bio;
+    margin: 10px;
+}
+.project .links{
+    grid-area: link;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.project .play-link{
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
