@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- We only include this to explicitly loosen the CSP of various packager environments. It does not provide any security. -->
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:">
-  <title>TACT-AIM Holloween</title>
+  <title>TACT-AIM blood</title>
   <style>
     body {
       color: #ffffff;
@@ -200,13 +200,6 @@
     try {
       setProgress(0.1);
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const paramName = urlParams.get('name');
-
-      const finalUsername = paramName
-              ? paramName
-              : "player####".replace(/#/g, () => Math.floor(Math.random() * 10));
-
       const scaffolding = new Scaffolding.Scaffolding();
       scaffolding.width = 480;
       scaffolding.height = 360;
@@ -227,11 +220,17 @@
         videoProvider: vm.runtime.ioDevices.video.provider
       };
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramName = urlParams.get('name');
+      const finalUsername = paramName
+              ? paramName
+              : "player####".replace(/#/g, () => Math.floor(Math.random() * 10));
+
       scaffolding.setUsername(finalUsername);
-      scaffolding.setAccentColor("#ff4c4c");
+      scaffolding.setAccentColor("#3584e4");
 
       try {
-        scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "1395324432"));
+        scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "1297721083"));
       } catch (error) {
         console.error(error);
       }
@@ -342,7 +341,7 @@
 
       vm.setTurboMode(false);
       if (vm.setInterpolation) vm.setInterpolation(false);
-      if (vm.setFramerate) vm.setFramerate(30);
+      if (vm.setFramerate) vm.setFramerate(60);
       if (vm.renderer.setUseHighQualityRender) vm.renderer.setUseHighQualityRender(false);
       if (vm.setRuntimeOptions) vm.setRuntimeOptions({
         fencing: true,
